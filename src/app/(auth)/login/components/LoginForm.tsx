@@ -1,13 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Lock, User } from "lucide-react";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
 import useSWR from "swr";
+import { authenticate } from "@/lib/actions";
+import { useFormState } from "react-dom";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
-  const [error, setError] = useState("");
+  const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
+
   const fetcher = async () => {
     const res = await fetch(
       process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/v1/portal/common/captcha"
@@ -19,148 +22,77 @@ const LoginForm = () => {
     "api/v1/portal/common/captcha",
     fetcher
   );
-
-  const form = useForm({
-    defaultValues: {
-      partner_id: 66,
-      username: "",
-      password: "",
-      captcha_token: "",
-      captcha_text: "",
-    },
-  });
+  const [state, formAction] = useFormState(authenticate, undefined);
 
   useEffect(() => {
-    if (data?.token) {
-      form.setValue("captcha_token", data.token);
+    if (state?.message !== "success") {
+      mutate();
+      formRef.current?.reset();
     }
-  }, [data, form]);
+  }, [state?.message]);
 
-  const onSubmit = async (values: any) => {
-    try {
-      const res = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-          "/api/v1/portal/user/processLogin",
-        {
-          body: JSON.stringify(values),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-        }
-      ).then(async (result) => {
-        const payload = await result.json();
-        const data = {
-          status: result.status,
-          payload,
-        };
-        if (!result.ok) {
-          if (!data?.payload.message) {
-            setError(data.payload.error.message);
-          } else {
-            setError(data.payload.message);
-          }
-          form.resetField("password");
-          form.resetField("captcha_text");
-          mutate();
-        }
-        return data;
-      });
-      await fetch("/api/auth", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(res),
-      }).then(async (result) => {
-        const payload = await result.json();
-        const data = {
-          status: result.status,
-          payload,
-        };
-        if (!result.ok) {
-          throw data;
-        }
-        return data;
-      });
-      window.location.href = "/user-info";
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    if (state?.message === "success") {
+      router.push("/user-info");
     }
-  };
+  }, [state?.message, router]);
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
-        <div className="mt-4 flex flex-col gap-3">
-          <FormField
-            control={form.control}
+    <form action={formAction} ref={formRef}>
+      <div className="mt-4 flex flex-col gap-3">
+        <div className="w-full relative">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <User className="text-[var(--login-btn)]" />
+          </span>
+          <Input
             name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <div className="w-full relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <User className="text-[var(--login-btn)]" />
-                    </span>
-                    <Input
-                      className="pl-11"
-                      placeholder="Mã KH, Điện thoại, Account Internet"
-                      {...field}
-                    />
-                  </div>
-                </FormControl>
-              </FormItem>
-            )}
+            className="pl-11"
+            placeholder="Mã KH, Điện thoại, Account Internet"
           />
-          <FormField
-            control={form.control}
+        </div>
+
+        <div className="w-full relative">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <Lock className="text-[var(--login-btn)]" />
+          </span>
+          <Input
             name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <div className="w-full relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <Lock className="text-[var(--login-btn)]" />
-                    </span>
-                    <Input
-                      type="password"
-                      className="pl-11"
-                      placeholder="Mật khẩu"
-                      {...field}
-                    />
-                  </div>
-                </FormControl>
-              </FormItem>
-            )}
+            type="password"
+            className="pl-11"
+            placeholder="Mật khẩu"
           />
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 sm:col-span-6">
-              <FormField
-                control={form.control}
-                name="captcha_text"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input placeholder="Mã kiểm tra" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div
-              className="col-span-12 sm:col-span-6"
-              dangerouslySetInnerHTML={{ __html: data?.svg }}
-            />
+        </div>
+
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-12 sm:col-span-6">
+            <Input name="captcha_text" placeholder="Mã kiểm tra" />
           </div>
+          <div
+            className="col-span-12 sm:col-span-6"
+            dangerouslySetInnerHTML={{ __html: data?.svg }}
+          />
         </div>
-        <p className="text-sm text-red-600 mt-5">{error}</p>
-        <div className="flex justify-center mt-5">
-          <button className="py-2 px-4 bg-[var(--login-btn)] text-white font-bold rounded-md">
-            Đăng nhập
-          </button>
-        </div>
-      </form>
-    </Form>
+      </div>
+      <Input name="partner_id" value={66} type="" className="hidden" readOnly />
+      <Input
+        name="captcha_token"
+        value={data?.token}
+        type=""
+        className="hidden"
+        readOnly
+      />
+      <p className="text-sm text-red-600 mt-5">
+        {state?.message !== "success" && state?.message}
+      </p>
+      <div className="flex justify-center mt-5">
+        <button
+          type="submit"
+          className="py-2 px-4 bg-[var(--login-btn)] text-white font-bold rounded-md"
+        >
+          Đăng nhập
+        </button>
+      </div>
+    </form>
   );
 };
 
