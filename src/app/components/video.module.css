@@ -1,0 +1,41 @@
+.btn {
+  background: #ffb600eb;
+  padding: 10px 0;
+  border-radius: 5px;
+  position: relative;
+  width: 200px;
+  transition: 0.2s ease-in letter-spacing;
+  overflow: hidden;
+}
+
+.btn::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 50%;
+  background-image: linear-gradient(
+    270deg,
+    hsla(0, 0%, 100%, 0.15),
+    transparent
+  );
+  --tw-skew-x: 45deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  transition-duration: 0.5s;
+  animation-duration: 0.5s;
+  content: "";
+}
+
+.btn:hover {
+  letter-spacing: 3px;
+}
+.btn:hover:before {
+  content: "";
+  --tw-translate-x: 200%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  overflow: hidden;
+}

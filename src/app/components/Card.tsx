@@ -1,39 +1,49 @@
+"use client";
+import { DialogTrigger } from "@/components/ui/dialog";
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
+import React, { useState } from "react";
 
-const Card = ({ product }: { product: productType }) => {
+const Card = ({ product }: { product: internetProduct }) => {
+  const [imgSrc, setImgSrc] = useState(
+    product.P_PICTURE ?? "/images/noimg.jpeg"
+  );
+
   return (
-    <div className="h-[500px] m-4 shadow-lg p-4 text-center flex flex-col justify-between">
+    <div className="shadow-lg text-center flex flex-col justify-between p-4 my-4 border border-gray-200 w-[100%] xl:w-[85%]">
       <div>
-        {product.title}
-        <div className="relative w-full h-[200px] mt-3">
+        <h3 className="font-bold text-blue-800">{product.P_NAME}</h3>
+        <div className="relative w-full h-[200px] mt-3 bg-black">
           <Image
-            src={product.image}
+            src={imgSrc}
             alt=""
             layout="fill"
-            objectFit="contained"
+            objectFit={"/images/noimg.jpeg" === imgSrc ? "cover" : "contain"}
+            loader={(item) => item.src}
+            onError={() => setImgSrc("/images/noimg.jpeg")}
           />
         </div>
-        <div className="flex flex-col items-start mt-5 text-sm">
-          <p>{product.description}</p>
-          <ul className="flex flex-col gap-2 mt-2">
-            {product.details.map((detail: string) => (
-              <li className="text-start" key={detail}>
-                - {detail}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <div
+          className="text-start mt-5 overflow-hidden h-[150px]"
+          dangerouslySetInnerHTML={{ __html: product.P_SUMMARY }}
+        />
       </div>
 
       <div>
-        <div className="flex w-full justify-center gap-4">
-          <button className="bg-[linear-gradient(225deg,#2ed3ae,#109df7)] text-white px-4 py-2 font-bold">
-            XEM CHI TIẾT
-          </button>
-          <button className="bg-[linear-gradient(225deg,#2ed3ae,#109df7)] text-white px-4 py-2 font-bold">
-            ĐẶT MUA
-          </button>
+        <div className="w-full gap-3 grid grid-cols-12 pb-2 pt-5">
+          <Link
+            href={`/products/${product.P_ID}`}
+            className="col-span-12 xl:col-span-6 flex justify-end"
+          >
+            <button className="bg-[linear-gradient(225deg,#2ed3ae,#109df7)] text-white text-sm px-4 py-2 font-bold w-full xl:w-[150px]">
+              XEM CHI TIẾT
+            </button>
+          </Link>
+          <DialogTrigger asChild className="col-span-12 xl:col-span-6">
+            <button className="bg-[linear-gradient(225deg,#2ed3ae,#109df7)] text-white text-sm px-4 py-2 font-bold w-full xl:w-[150px]">
+              ĐẶT MUA
+            </button>
+          </DialogTrigger>
         </div>
       </div>
     </div>

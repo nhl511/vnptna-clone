@@ -1,13 +1,22 @@
 import React from "react";
 import MainCarousel from "../components/MainCarousel";
-import { images2, products2 } from "@/data/data";
 import Products from "../components/Products";
 
-const BusinessPage = () => {
+const getBanner = async () => {
+  const res = await fetch(
+    process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
+      `/api/v1/portal/partner/getBanner?partner_id=66&pos=2&type=2`
+  );
+  const result = await res.json();
+  return result.data;
+};
+
+const BusinessPage = async () => {
+  const banner = await getBanner();
   return (
     <div>
-      <MainCarousel images={images2} />
-      <Products products={products2} />
+      <MainCarousel images={banner} />
+      {/* <Products products={products2} /> */}
     </div>
   );
 };

@@ -1,6 +1,6 @@
-interface carouselImageType {
-  key: number;
-  url: string;
+interface bannerType {
+  BANNER_ID: number;
+  BANNER_SOURCE: string;
 }
 
 interface videoType {
@@ -14,19 +14,13 @@ interface introType {
   description: string;
 }
 
-interface productType {
-  id: number;
-  title: string;
-  image: string;
-  description: string;
-  details: string[];
-}
-
 interface newsType {
-  id: number;
-  image: string;
-  title: string;
-  description: string;
+  SERVICE_ID: number;
+  SERVICE_PIC: string;
+  SERVICE_TITLE: string;
+  SERVICE_SUB_CONTENT: string;
+  SERVICE_CONTENT: string;
+  SERVICE_CREATEDATE: string;
 }
 
 interface subLinkType {
@@ -37,6 +31,7 @@ interface subLinkType {
 
 interface linkType {
   name: string;
+  path?: string;
   subLink?: subLinkType[];
 }
 
@@ -51,4 +46,39 @@ interface locationType {
   name: string;
   address: string;
   phone: string;
+}
+
+interface PaginationProps {
+  currentPage: number;
+  totalItems: number;
+  limit: number;
+  onPageChange: (page: number) => void;
+}
+
+interface internetProduct {
+  P_ID: number;
+  P_NAME: string;
+  P_DESCRIPTION: string;
+  P_PICTURE: string;
+  P_PRICE: number;
+  P_SUMMARY: string;
+  P_TYPE: number;
+}
+
+interface branchType {
+  branch_id: number;
+  branch_name: string;
+  branch_phone: string;
+  branch_address: string;
+  branch_gps: string;
+}
+
+interface monthType {
+  title: string;
+  value: string;
+}
+
+interface tableType {
+  title: string;
+  value: string;
 }

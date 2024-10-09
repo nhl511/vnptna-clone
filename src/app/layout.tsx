@@ -4,6 +4,21 @@ import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Hotline from "@/components/Hotline";
+import GoToTop from "@/components/GoToTop";
+import { cookies } from "next/headers";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,18 +41,53 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = cookies();
+  const token: any = cookieStore.get("user_info");
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header>
-          <Navbar />
-        </header>
-        <main className="bg-white">{children}</main>
-        <footer>
-          <Footer />
-        </footer>
+        <Dialog>
+          <header className="sticky top-[-2.5rem] z-10">
+            <Navbar initialToken={token?.value} />
+          </header>
+          <main className="bg-white relative">
+            {children}
+            <Hotline />
+            <GoToTop />
+          </main>
+          <footer>
+            <Footer />
+          </footer>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Thông tin liên hệ</DialogTitle>
+              <DialogDescription>
+                Bạn vui lòng để lại thông tin sau trước khi đặt mua
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input id="name" value="Pedro Duarte" className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="username" className="text-right">
+                  Username
+                </Label>
+                <Input id="username" value="@peduarte" className="col-span-3" />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Lưu thông tin</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        <Toaster />
       </body>
     </html>
   );
