@@ -1,5 +1,6 @@
 "use server";
 
+import { login } from "@/apiRequests/auth";
 import { cookies } from "next/headers";
 
 export const authenticate = async (prevState: any, formData: any) => {
@@ -13,40 +14,17 @@ export const authenticate = async (prevState: any, formData: any) => {
     captcha_text,
   };
 
-  try {
-    const result = await fetch(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-        "/api/v1/portal/user/processLogin",
-      {
-        body: JSON.stringify(rawFormData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      }
-    );
-
-    const payload = await result.json();
-    const data = {
-      status: result.status,
-      payload,
-    };
-
-    if (!result.ok) {
-      throw new Error(data.payload.message || data.payload.error.message);
-    }
-
+  const result = await login(rawFormData);
+  if (result?.token) {
     cookies().set({
       name: "user_info",
-      value: data.payload.data.token,
+      value: result?.token,
       httpOnly: true,
       path: "/",
     });
-
-    return { message: "success" };
-  } catch (error: any) {
-    return {
-      message: error?.message || "Something went wrong",
-    };
   }
+
+  return {
+    message: result.message,
+  };
 };
