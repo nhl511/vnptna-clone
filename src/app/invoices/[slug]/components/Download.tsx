@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
 const Download = ({
   result,
@@ -8,13 +8,21 @@ const Download = ({
   result: any;
   customerCode: string;
 }) => {
+  // Separate loading states for each button
+  const [isLoadingPDF, setIsLoadingPDF] = useState(false);
+  const [isLoadingXML, setIsLoadingXML] = useState(false);
+  const [isLoadingINV, setIsLoadingINV] = useState(false);
+
   const downloadFile = async ({
     token_download,
     type,
+    setLoading,
   }: {
     token_download: string;
     type: string;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   }) => {
+    setLoading(true);
     try {
       const response = await fetch(
         process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
@@ -48,6 +56,8 @@ const Download = ({
       document.body.removeChild(a); // Remove the link element after downloading
     } catch (error) {
       console.error("Failed to download file:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,10 +69,11 @@ const Download = ({
           downloadFile({
             token_download: result.payload.data.token_download,
             type: "pdf",
+            setLoading: setIsLoadingPDF,
           });
         }}
       >
-        Tải về file PDF
+        {isLoadingPDF ? "Loading PDF..." : "Tải về file PDF"}
       </button>
       <button
         className="bg-blue-500 text-white py-2 px-4 rounded-md"
@@ -70,10 +81,11 @@ const Download = ({
           downloadFile({
             token_download: result.payload.data.token_download,
             type: "xml",
+            setLoading: setIsLoadingXML,
           });
         }}
       >
-        Tải về file XML
+        {isLoadingXML ? "Loading XML..." : "Tải về file XML"}
       </button>
       <button
         className="bg-blue-500 text-white py-2 px-4 rounded-md"
@@ -81,10 +93,11 @@ const Download = ({
           downloadFile({
             token_download: result.payload.data.token_download,
             type: "inv",
+            setLoading: setIsLoadingINV,
           });
         }}
       >
-        Tải về file INV
+        {isLoadingINV ? "Loading INV..." : "Tải về file INV"}
       </button>
     </div>
   );
