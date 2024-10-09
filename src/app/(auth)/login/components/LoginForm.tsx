@@ -29,13 +29,13 @@ const LoginForm = () => {
       mutate();
       formRef.current?.reset();
     }
-  }, [state?.message]);
+  }, [state]);
 
   useEffect(() => {
     if (state?.message === "success") {
       router.push("/user-info");
     }
-  }, [state?.message, router]);
+  }, [state, router]);
 
   return (
     <form action={formAction} ref={formRef}>
