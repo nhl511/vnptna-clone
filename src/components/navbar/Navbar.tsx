@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import MenuItem from "./MenuItem";
-import { LogIn, LogOut, Menu, Search } from "lucide-react";
+import { LogIn, LogOut, Menu, Search, SquareMenu } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   NavigationMenu,
@@ -162,7 +162,7 @@ const Navbar = ({ initialToken }: { initialToken: string }) => {
           <NavigationMenu className="xl:container mx-auto h-[100px] items-center justify-start md:justify-between px-4 xl:px-0">
             <div className="md:hidden mr-4">
               <SheetTrigger>
-                <Menu />
+                <SquareMenu size={30} className="text-blue-700" />
               </SheetTrigger>
             </div>
             <div>
