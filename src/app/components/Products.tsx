@@ -36,15 +36,19 @@ const Products = ({ products }: { products: internetProduct[] }) => {
       <Carousel
         setApi={setApi}
         opts={{
-          slidesToScroll: 3,
+          slidesToScroll: 1,
           loop: true,
+          breakpoints: {
+            "(min-width: 640px)": { slidesToScroll: 2 },
+            "(min-width: 1024px)": { slidesToScroll: 3 },
+          },
         }}
       >
-        <CarouselContent className="">
+        <CarouselContent className="-ml-2 md:-ml-4 lg:-ml-6 xl-ml-12">
           {products.map((product: internetProduct) => (
             <CarouselItem
               key={product.P_ID}
-              className="md:basis-1/2 lg:basis-1/3 flex justify-center"
+              className="xs:basis-1/1 sm:basis-1/2 lg:basis-1/3 pl-2 md:pl-4 lg:pl-6 xl:pl-12"
             >
               <Card product={product} />
             </CarouselItem>

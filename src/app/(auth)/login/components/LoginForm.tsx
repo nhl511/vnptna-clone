@@ -6,22 +6,14 @@ import useSWR from "swr";
 import { authenticate } from "@/lib/actions";
 import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
+import { getCaptcha } from "@/apiRequests/common";
 
 const LoginForm = () => {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
 
-  const fetcher = async () => {
-    const res = await fetch(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/v1/portal/common/captcha"
-    );
-    const result = await res.json();
-    return result.data;
-  };
-  const { data, mutate, isLoading } = useSWR(
-    "api/v1/portal/common/captcha",
-    fetcher
-  );
+  const { data, mutate } = getCaptcha();
+
   const [state, formAction] = useFormState(authenticate, undefined);
 
   useEffect(() => {

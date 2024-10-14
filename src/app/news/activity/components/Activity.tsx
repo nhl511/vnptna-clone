@@ -1,30 +1,28 @@
 "use client";
+import { getNewsByCateId } from "@/apiRequests/menu";
 import MyPagination from "@/components/MyPagination";
 import NewsCard from "@/components/NewsCard";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import React from "react";
 import useSWR from "swr";
 
 const Activity = () => {
-  const [page, setPage] = useState(1);
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page");
+
   const fetcher = async (page: number) => {
-    const res = await fetch(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-        `/api/v1/portal/menu/getNewsByCateId?service_id=2174&page=${page}&num=10`
-    );
-    const result = await res.json();
-    return result.data;
+    const result = await getNewsByCateId({
+      id: 2174,
+      page: page,
+      num: 10,
+    });
+    return result;
   };
-  useEffect(() => {
-    if (page) {
-      window.scrollTo({
-        top: 0,
-      });
-    }
-  }, [page]);
+
   const { data, isLoading } = useSWR(
     `api/v1/portal/menu/getNewsByCateId?service_id=2174&page=${page}&num=10`,
-    () => fetcher(page)
+    () => fetcher(Number(page))
   );
   if (isLoading) return <div>Loading...</div>;
   return (
@@ -38,10 +36,10 @@ const Activity = () => {
       ))}
       <div className="my-10">
         <MyPagination
-          currentPage={page}
+          pageQuery={Number(page) || 1}
           totalItems={data?.total}
           limit={10}
-          onPageChange={setPage}
+          type={2}
         />
       </div>
     </div>

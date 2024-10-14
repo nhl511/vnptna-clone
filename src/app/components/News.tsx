@@ -50,7 +50,7 @@ const News = ({ news }: { news: newsType[] }) => {
             {news.map((item: newsType) => (
               <CarouselItem
                 key={item.SERVICE_ID}
-                className="md:basis-1/2 lg:basis-1/3"
+                className="sm:basis-1/2 lg:basis-1/3"
               >
                 <Link href={`/news/promotion-news/${item.SERVICE_ID}`}>
                   <NewsCard item={item} />

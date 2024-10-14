@@ -1,18 +1,10 @@
 import React from "react";
 import MainCarousel from "../components/MainCarousel";
 import Products from "../components/Products";
-
-const getBanner = async () => {
-  const res = await fetch(
-    process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-      `/api/v1/portal/partner/getBanner?partner_id=66&pos=2&type=2`
-  );
-  const result = await res.json();
-  return result.data;
-};
+import { getBanner } from "@/apiRequests/partner";
 
 const BusinessPage = async () => {
-  const banner = await getBanner();
+  const banner = await getBanner(2);
   return (
     <div>
       <MainCarousel images={banner} />

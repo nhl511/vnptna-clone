@@ -1,3 +1,4 @@
+import { getNewsDetail } from "@/apiRequests/menu";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,11 +11,7 @@ import React from "react";
 
 const NewsDetail = async ({ params }: any) => {
   const { slug } = params;
-  const res = await fetch(
-    process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-      `/api/v1/portal/menu/getNewsDetail?service_id=${slug}`
-  );
-  const result = await res.json();
+  const result = await getNewsDetail(slug);
   return (
     <div className="flex flex-col gap-6">
       <Breadcrumb>

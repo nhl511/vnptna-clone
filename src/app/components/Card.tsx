@@ -10,15 +10,15 @@ const Card = ({ product }: { product: internetProduct }) => {
   );
 
   return (
-    <div className="shadow-lg text-center flex flex-col justify-between p-4 my-4 border border-gray-200 w-[100%] xl:w-[85%]">
+    <div className="shadow-lg text-center flex flex-col justify-between p-4 my-4 border border-gray-200">
       <div>
-        <h3 className="font-bold text-blue-800">{product.P_NAME}</h3>
-        <div className="relative w-full h-[200px] mt-3 bg-black">
+        <h3 className="font-bold text-blue-800 truncate">{product.P_NAME}</h3>
+        <div className="relative w-full h-[200px] mt-3 bg-white">
           <Image
             src={imgSrc}
             alt=""
-            layout="fill"
-            objectFit={"/images/noimg.jpeg" === imgSrc ? "cover" : "contain"}
+            fill={true}
+            objectFit={"/images/noimg.jpeg" === imgSrc ? "cover" : "fill"}
             loader={(item) => item.src}
             onError={() => setImgSrc("/images/noimg.jpeg")}
           />

@@ -12,7 +12,7 @@ const NewsCard = ({ item }: { item: newsType }) => {
         <Image
           src={imgSrc}
           alt=""
-          layout="fill"
+          fill={true}
           objectFit={imgSrc === "/images/noimg.jpeg" ? "cover" : "contain"}
           loader={(item) => item.src}
           onError={() => setImgSrc("/images/noimg.jpeg")}

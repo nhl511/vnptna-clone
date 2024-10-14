@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Divide } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const MyPagination: React.FC<PaginationProps> = ({
-  currentPage,
   totalItems,
   limit,
-  onPageChange,
+  pageQuery,
+  type,
 }) => {
+  const [currentPage, setCurrentPage] = useState(pageQuery);
+
+  const router = useRouter();
   const totalPages = Math.ceil(totalItems / limit); // Calculate total pages based on total items and limit
   const pages = [];
 
@@ -17,13 +21,20 @@ const MyPagination: React.FC<PaginationProps> = ({
     pages.push(i);
   }
 
+  useEffect(() => {
+    if (currentPage) {
+      if (type === 1) router.push("/news/promotion-news?page=" + currentPage);
+      else router.push("/news/activity?page=" + currentPage);
+    }
+  }, [currentPage]);
+
   return (
     <div className="w-full flex items-center space-x-2 text-xs">
       <button
         className={`p-1 rounded ${
           currentPage === 1 ? "bg-gray-300" : "bg-blue-500 text-white"
         }`}
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => setCurrentPage(currentPage - 1)}
         disabled={currentPage === 1}
       >
         <ChevronLeft size={16} />
@@ -35,7 +46,7 @@ const MyPagination: React.FC<PaginationProps> = ({
             className={`px-3 py-1 rounded ${
               1 === currentPage ? "bg-blue-500 text-white" : "bg-gray-200"
             }`}
-            onClick={() => onPageChange(1)}
+            onClick={() => setCurrentPage(1)}
           >
             1
           </button>
@@ -49,7 +60,9 @@ const MyPagination: React.FC<PaginationProps> = ({
           className={`px-3 py-1 rounded ${
             page === currentPage ? "bg-blue-500 text-white" : "bg-gray-200"
           }`}
-          onClick={() => onPageChange(page)}
+          onClick={() => {
+            setCurrentPage(page);
+          }}
         >
           {page}
         </button>
@@ -64,7 +77,7 @@ const MyPagination: React.FC<PaginationProps> = ({
                 ? "bg-blue-500 text-white"
                 : "bg-gray-200"
             }`}
-            onClick={() => onPageChange(totalPages)}
+            onClick={() => setCurrentPage(totalPages)}
           >
             {totalPages}
           </button>
@@ -75,7 +88,7 @@ const MyPagination: React.FC<PaginationProps> = ({
         className={`p-1 rounded ${
           currentPage === totalPages ? "bg-gray-300" : "bg-blue-500 text-white"
         }`}
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => setCurrentPage(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
         <ChevronRight size={16} />

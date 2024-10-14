@@ -49,10 +49,10 @@ interface locationType {
 }
 
 interface PaginationProps {
-  currentPage: number;
+  pageQuery: number;
   totalItems: number;
   limit: number;
-  onPageChange: (page: number) => void;
+  type: number;
 }
 
 interface internetProduct {

@@ -1,3 +1,4 @@
+import { getProductInfo } from "@/apiRequests/product";
 import ProductDetail from "@/components/ProductDetail";
 import {
   Breadcrumb,
@@ -8,6 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import React from "react";
 
 const linkMapper = (id: number) => {
@@ -45,12 +47,7 @@ const linkMapper = (id: number) => {
 
 const ProductDetailPage = async ({ params }: any) => {
   const { slug } = params;
-  const res = await fetch(
-    process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-      `/api/v1/portal/product/getInfoProduct?product_id=${slug}`
-  );
-  const result = await res.json();
-
+  const result = await getProductInfo(slug);
   const link = linkMapper(result.data.C_ID);
 
   return (

@@ -1,4 +1,6 @@
 "use client";
+import { changePassword } from "@/apiRequests/auth";
+import { getCaptcha } from "@/apiRequests/common";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -8,6 +10,7 @@ import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
 const ChangePasswordForm = ({ user }: { user: any }) => {
+  const { data, mutate } = getCaptcha();
   const { toast } = useToast();
 
   const hanldeToast = () => {
@@ -17,17 +20,7 @@ const ChangePasswordForm = ({ user }: { user: any }) => {
   };
 
   const [error, setError] = useState("");
-  const fetcher = async () => {
-    const res = await fetch(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/v1/portal/common/captcha"
-    );
-    const result = await res.json();
-    return result.data;
-  };
-  const { data, mutate, isLoading } = useSWR(
-    "api/v1/portal/common/captcha",
-    fetcher
-  );
+
   const form = useForm({
     defaultValues: {
       partner_id: 66,
@@ -45,35 +38,14 @@ const ChangePasswordForm = ({ user }: { user: any }) => {
     }
   }, [data, form]);
   const onSubmit = async (values: any) => {
-    await fetch(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-        "/api/v1/portal/user/changePass",
-      {
-        body: JSON.stringify(values),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      }
-    ).then(async (result) => {
-      const payload = await result.json();
-      const data = {
-        status: result.status,
-        payload,
-      };
-      if (!result.ok) {
-        if (!data?.payload.message) {
-          setError(data.payload.error.message);
-        } else {
-          setError(data.payload.message);
-        }
-        form.reset();
-        mutate();
-      } else {
-        hanldeToast();
-      }
-      return data;
-    });
+    const result = await changePassword(values);
+    if (result.message === "success") {
+      hanldeToast();
+    } else {
+      form.reset();
+      mutate();
+      setError(result.message);
+    }
   };
   return (
     <>

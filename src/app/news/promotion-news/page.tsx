@@ -9,7 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-const PromotionNewsPage = () => {
+const PromotionNewsPage = async () => {
   return (
     <div className="flex flex-col gap-6">
       <Breadcrumb>
