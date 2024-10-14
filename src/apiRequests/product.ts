@@ -9,7 +9,12 @@ export const getProducts = async (limit: number) => {
       api +
       endpoint.product.getProducts +
       `?partner_id=66&limit=${limit}&language=vi`,
-    option: { next: { revalidate: 5 } },
+    option: {
+      next: { revalidate: 5 },
+      headers: {
+        Authorization: "Bearer aaaaaa",
+      },
+    },
   });
   const result = await res.json();
   return result.data;
