@@ -8,9 +8,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { getNewsByCateId } from "@/services/apis/menu.service";
+import { getProductsByServiceCate } from "@/services/apis/products.service";
 import React from "react";
 
-const InternetCamPage = () => {
+const InternetCamPage = async () => {
+  const introHeader = await getNewsByCateId({ id: 2123, page: 1, num: 1 });
+
+  const products = await getProductsByServiceCate(2123);
   return (
     <div className="xl:container mx-auto px-4 xl:px-0 pb-5">
       <Breadcrumb className="my-6">
@@ -24,8 +29,8 @@ const InternetCamPage = () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <IntroHeader id={2123} />
-      <ProductList id={2123} />
+      <IntroHeader introHeader={introHeader} />
+      <ProductList products={products.data} />
     </div>
   );
 };

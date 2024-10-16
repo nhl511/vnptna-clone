@@ -1,9 +1,9 @@
 "use client";
-import { changePassword } from "@/apiRequests/auth";
 import { getCaptcha } from "@/apiRequests/common";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { changePassword } from "@/services/apis/auth.service";
 import { Lock } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";

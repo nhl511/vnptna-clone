@@ -1,7 +1,7 @@
 import React from "react";
 import MainCarousel from "../components/MainCarousel";
 import Products from "../components/Products";
-import { getBanner } from "@/apiRequests/partner";
+import { getBanner } from "@/services/apis/partner.service";
 
 const BusinessPage = async () => {
   const banner = await getBanner(2);

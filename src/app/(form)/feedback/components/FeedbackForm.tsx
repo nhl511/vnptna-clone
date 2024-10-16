@@ -18,18 +18,32 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { getCaptcha } from "@/services/apis/common.service";
+
+const formSchema = z.object({
+  topic: z.string().min(1, { message: "Tiêu đề là bắt buộc" }),
+  name: z.string().min(1, { message: "Tên là bắt buộc" }),
+  address: z.string().min(1, { message: "Địa chỉ là bắt buộc" }),
+  location: z.string().min(1, { message: "Quận / Huyện là bắt buộc" }),
+  phoneNum: z
+    .string()
+    .min(1, { message: "Số điện thoại là bắt buộc" })
+    .regex(/^(03|05|07|08|09)\d{8}$/, {
+      message: "Số điện thoại không hợp lệ",
+    }),
+  fax: z.string(),
+  email: z.string(),
+  content: z.string().min(1, { message: "Nội dung là bắt buộc" }),
+  captchaText: z.string().min(1, { message: "Mã captcha là bát buộc" }),
+});
 
 const FeedbackForm = ({ criteria, units }: { criteria: any; units: any }) => {
-  const fetcher = async () => {
-    const res = await fetch(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/v1/portal/common/captcha"
-    );
-    const result = await res.json();
-    return result.data;
-  };
-  const { data } = useSWR("api/v1/portal/common/captcha", fetcher);
-  const form = useForm({
+  const { data, mutate } = getCaptcha();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+
     defaultValues: {
       topic: "",
       name: "",
@@ -85,9 +99,6 @@ const FeedbackForm = ({ criteria, units }: { criteria: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Tiêu đề là bắt buộc",
-          }}
         />
         <FormField
           control={form.control}
@@ -107,9 +118,6 @@ const FeedbackForm = ({ criteria, units }: { criteria: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Tên là bắt buộc",
-          }}
         />
         <FormField
           control={form.control}
@@ -129,9 +137,6 @@ const FeedbackForm = ({ criteria, units }: { criteria: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Địa chỉ là bắt buộc",
-          }}
         />
         <FormField
           control={form.control}
@@ -164,9 +169,6 @@ const FeedbackForm = ({ criteria, units }: { criteria: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Quận, huyện là bắt buộc",
-          }}
         />
         <FormField
           control={form.control}
@@ -186,13 +188,6 @@ const FeedbackForm = ({ criteria, units }: { criteria: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Số điện thoại là bắt buộc",
-            pattern: {
-              value: /^(03|05|07|08|09)\d{8}$/,
-              message: "Số điện thoại không hợp lệ",
-            },
-          }}
         />
         <FormField
           control={form.control}
@@ -240,9 +235,6 @@ const FeedbackForm = ({ criteria, units }: { criteria: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Nội dung là bắt buộc",
-          }}
         />
         <FormField
           control={form.control}
@@ -266,9 +258,6 @@ const FeedbackForm = ({ criteria, units }: { criteria: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Captcha là bắt buộc",
-          }}
         />
         <div className="flex justify-center md:justify-end mt-4">
           <button className="w-full md:w-[200px] py-2 bg-[var(--login-btn)] text-white font-bold rounded-md">

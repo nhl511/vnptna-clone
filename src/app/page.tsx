@@ -5,9 +5,9 @@ import MainCarousel from "./components/MainCarousel";
 import News from "./components/News";
 import Payment from "./components/Payment";
 import { intro, video } from "@/data/data";
-import { getProducts } from "@/apiRequests/product";
-import { getBanner } from "@/apiRequests/partner";
-import { getNewsByCateId } from "@/apiRequests/menu";
+import { getNewsByCateId } from "@/services/apis/menu.service";
+import { getBanner } from "@/services/apis/partner.service";
+import { getProducts } from "@/services/apis/products.service";
 
 const Homepage = async () => {
   const banner = await getBanner(1);

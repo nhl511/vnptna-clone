@@ -6,15 +6,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getListBranch } from "@/services/apis/partner.service";
 import Link from "next/link";
 import React from "react";
 
 const LocationPage = async () => {
-  const res = await fetch(
-    process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-      "/api/v1/portal/partner/listBranch?partner_id=66"
-  );
-  const result = await res.json();
+  const branches = await getListBranch();
   return (
     <div className="xl:container xl:mx-auto min-h-[100vh]">
       <Table className="mt-10">
@@ -28,7 +25,7 @@ const LocationPage = async () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {result.data.map((location: branchType) => (
+          {branches.map((location: branchType) => (
             <TableRow key={location.branch_id}>
               <TableCell>{location.branch_id}</TableCell>
               <TableCell>{location.branch_name}</TableCell>

@@ -1,27 +1,22 @@
 "use client";
 import { Smartphone } from "lucide-react";
-import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import { DialogTrigger } from "./ui/dialog";
+import ImageWithFallback from "./ImageWithFallback";
 
 const ProductDetail = ({ product }: { product: internetProduct }) => {
-  const [imgSrc, setImgSrc] = useState(
-    product.P_PICTURE ?? "/images/noimg.jpeg"
-  );
   return (
     <div>
       <h3 className="text-xl font-bold my-8">{product.P_NAME}</h3>
       <div className="grid grid-cols-12 gap-4 md:gap-8 lg:gap-16">
-        <div className="col-span-12 lg:col-span-6">
-          <Image
-            src={imgSrc}
+        <div className="col-span-12 lg:col-span-6 relative">
+          <ImageWithFallback
+            src={product.P_PICTURE}
+            fallbackSrc="/images/noimg.jpeg"
             layout="responsive"
-            objectFit="cover"
             width={100}
             height={50}
             alt=""
-            loader={(item) => item.src}
-            onError={() => setImgSrc("/images/noimg.jpeg")}
           />
         </div>
         <div className="col-span-12 lg:col-span-6">

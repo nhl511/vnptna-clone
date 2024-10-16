@@ -1,21 +1,16 @@
 "use client";
-import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
+import ImageWithFallback from "./ImageWithFallback";
 
 const NewsCard = ({ item }: { item: newsType }) => {
-  const [imgSrc, setImgSrc] = useState(
-    item.SERVICE_PIC ?? "/images/noimg.jpeg"
-  );
   return (
     <div className="">
       <div className="relative h-[220px] overflow-hidden bg-black">
-        <Image
-          src={imgSrc}
+        <ImageWithFallback
+          src={item.SERVICE_PIC}
+          fallbackSrc="/images/noimg.jpeg"
+          fill
           alt=""
-          fill={true}
-          objectFit={imgSrc === "/images/noimg.jpeg" ? "cover" : "contain"}
-          loader={(item) => item.src}
-          onError={() => setImgSrc("/images/noimg.jpeg")}
         />
       </div>
       <h4 className="my-3 font-bold text-sm uppercase truncate">

@@ -8,9 +8,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { getNewsByCateId } from "@/services/apis/menu.service";
+import { getProductsByServiceCate } from "@/services/apis/products.service";
 import React from "react";
 
-const Vinaphone = () => {
+const Vinaphone = async () => {
+  const introHeader = await getNewsByCateId({ id: 2144, page: 1, num: 1 });
+  const products = await getProductsByServiceCate(2144);
   return (
     <div className="xl:container mx-auto px-4 xl:px-0 pb-5">
       <Breadcrumb className="my-6">
@@ -24,8 +28,8 @@ const Vinaphone = () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <IntroHeader id={2144} />
-      <ProductList id={2144} />
+      <IntroHeader introHeader={introHeader} />
+      <ProductList products={products.data} />
     </div>
   );
 };

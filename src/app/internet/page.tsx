@@ -9,8 +9,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { getNewsByCateId } from "@/services/apis/menu.service";
+import { getProductsByServiceCate } from "@/services/apis/products.service";
 
-const InternetPage = () => {
+const InternetPage = async () => {
+  const introHeader = await getNewsByCateId({ id: 2121, page: 1, num: 1 });
+  const products = await getProductsByServiceCate(2121);
+
   return (
     <div className="xl:container mx-auto px-4 xl:px-0 pb-5">
       <Breadcrumb className="my-6">
@@ -24,8 +29,8 @@ const InternetPage = () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <IntroHeader id={2121} />
-      <ProductList id={2121} />
+      <IntroHeader introHeader={introHeader} />
+      <ProductList products={products?.data} />
     </div>
   );
 };

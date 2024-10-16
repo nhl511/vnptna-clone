@@ -24,7 +24,8 @@ const MyPagination: React.FC<PaginationProps> = ({
   useEffect(() => {
     if (currentPage) {
       if (type === 1) router.push("/news/promotion-news?page=" + currentPage);
-      else router.push("/news/activity?page=" + currentPage);
+      else if (type === 2) router.push("/news/activity?page=" + currentPage);
+      else router.push("/news/business-news?page=" + currentPage);
     }
   }, [currentPage]);
 

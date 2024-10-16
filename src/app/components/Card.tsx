@@ -1,26 +1,20 @@
 "use client";
+import ImageWithFallback from "@/components/ImageWithFallback";
 import { DialogTrigger } from "@/components/ui/dialog";
-import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 
 const Card = ({ product }: { product: internetProduct }) => {
-  const [imgSrc, setImgSrc] = useState(
-    product.P_PICTURE ?? "/images/noimg.jpeg"
-  );
-
   return (
     <div className="shadow-lg text-center flex flex-col justify-between p-4 my-4 border border-gray-200">
       <div>
         <h3 className="font-bold text-blue-800 truncate">{product.P_NAME}</h3>
         <div className="relative w-full h-[200px] mt-3 bg-white">
-          <Image
-            src={imgSrc}
+          <ImageWithFallback
+            src={product.P_PICTURE}
+            fallbackSrc="/images/noimg.jpeg"
+            fill
             alt=""
-            fill={true}
-            objectFit={"/images/noimg.jpeg" === imgSrc ? "cover" : "fill"}
-            loader={(item) => item.src}
-            onError={() => setImgSrc("/images/noimg.jpeg")}
           />
         </div>
         <div

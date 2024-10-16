@@ -1,23 +1,19 @@
 "use client";
 import { vnd } from "@/lib/currency";
-import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { DialogTrigger } from "./ui/dialog";
+import ImageWithFallback from "./ImageWithFallback";
 
 const ProductCardSearch = ({ item }: { item: internetProduct }) => {
-  const [imgSrc, setImgSrc] = useState(item.P_PICTURE ?? "/images/noimg.jpeg");
-
   return (
     <div className="border border-gray-200">
       <div className="relative h-[220px] overflow-hidden bg-black">
-        <Image
-          src={imgSrc}
+        <ImageWithFallback
+          src={item.P_PICTURE}
+          fallbackSrc="/images/noimg.jpeg"
+          fill
           alt=""
-          layout="fill"
-          objectFit={imgSrc === "/images/noimg.jpeg" ? "cover" : "contain"}
-          loader={(item) => item.src}
-          onError={() => setImgSrc("/images/noimg.jpeg")}
         />
       </div>
       <div className="py-2 px-4">

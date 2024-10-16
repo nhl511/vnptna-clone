@@ -1,4 +1,3 @@
-import { getNewsDetail } from "@/apiRequests/menu";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,6 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { getNewsDetail } from "@/services/apis/menu.service";
 import React from "react";
 
 const NewsDetail = async ({ params }: any) => {

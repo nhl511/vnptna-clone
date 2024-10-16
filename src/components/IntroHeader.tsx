@@ -1,15 +1,13 @@
-import { getIntroHeader } from "@/apiRequests/menu";
 import React from "react";
 
-const IntroHeader = async ({ id }: { id: number }) => {
-  const result = await getIntroHeader(id);
+const IntroHeader = async ({ introHeader }: { introHeader: any }) => {
   return (
     <div className="border border-gray-200 p-6 mb-10">
       <h3 className=" font-bold text-center uppercase text-[var(--header-bg)] text-2xl my-10">
-        {result.data.CATE_NAME}
+        {introHeader.CATE_NAME}
       </h3>
       <div
-        dangerouslySetInnerHTML={{ __html: result.data.CATE_CONTENT }}
+        dangerouslySetInnerHTML={{ __html: introHeader.CATE_CONTENT }}
         className="overflow-hidden"
       />
     </div>

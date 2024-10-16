@@ -1,4 +1,3 @@
-import { getProductInfo } from "@/apiRequests/product";
 import ProductDetail from "@/components/ProductDetail";
 import {
   Breadcrumb,
@@ -8,8 +7,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { getProductInfo } from "@/services/apis/products.service";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import React from "react";
 
 const linkMapper = (id: number) => {

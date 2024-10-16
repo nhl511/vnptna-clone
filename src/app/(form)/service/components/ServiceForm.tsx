@@ -18,18 +18,41 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import useSWR from "swr";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { getCaptcha } from "@/services/apis/common.service";
+
+const formSchema = z.object({
+  date: z.string(),
+  name: z.string().min(1, { message: "Tên là bắt buộc" }),
+  cccd: z
+    .string()
+    .min(1, { message: "CCCD là bắt buộc" })
+    .regex(/^\d{12}$/, { message: "CCCD không hợp lệ" }),
+  address: z.string().min(1, { message: "Địa chỉ là bắt buộc" }),
+  location: z.string().min(1, { message: "Huyện / Thị xã là bắt buộc" }),
+  phoneNum: z
+    .string()
+    .min(1, { message: "Số điện thoại là bắt buộc" })
+    .regex(/^(03|05|07|08|09)\d{8}$/, {
+      message: "Số điện thoại không hợp lệ",
+    }),
+  email: z
+    .string()
+    .min(1, { message: "Email là bắt buộc" })
+    .email({ message: "Email không hợp lệ" }),
+  service: z.string().min(1, { message: "Dịch vụ là bắt buộc" }),
+  note: z.string(),
+  captchaText: z.string().min(1, { message: "Mã captca là bắt buộc" }),
+});
+
 const ServiceForm = ({ services, units }: { services: any; units: any }) => {
   const date = new Date();
-  const fetcher = async () => {
-    const res = await fetch(
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/api/v1/portal/common/captcha"
-    );
-    const result = await res.json();
-    return result.data;
-  };
-  const { data } = useSWR("api/v1/portal/common/captcha", fetcher);
-  const form = useForm({
+  const { data, mutate } = getCaptcha();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+
     defaultValues: {
       date: `${String(date.getDate()).padStart(2, "0")}/${String(
         date.getMonth() + 1
@@ -86,9 +109,6 @@ const ServiceForm = ({ services, units }: { services: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Tên là bắt buộc",
-          }}
         />
         <FormField
           control={form.control}
@@ -108,13 +128,6 @@ const ServiceForm = ({ services, units }: { services: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "CCCD là bắt buộc",
-            pattern: {
-              value: /^\d{12}$/,
-              message: "CCCD không hợp lệ",
-            },
-          }}
         />
         <FormField
           control={form.control}
@@ -134,9 +147,6 @@ const ServiceForm = ({ services, units }: { services: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Địa chỉ là bắt buộc",
-          }}
         />
         <FormField
           control={form.control}
@@ -171,9 +181,6 @@ const ServiceForm = ({ services, units }: { services: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Huyện, thị xã là bắt buộc",
-          }}
         />
         <FormField
           control={form.control}
@@ -193,13 +200,6 @@ const ServiceForm = ({ services, units }: { services: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Số điện thoại là bắt buộc",
-            pattern: {
-              value: /^(03|05|07|08|09)\d{8}$/,
-              message: "Số điện thoại không hợp lệ",
-            },
-          }}
         />
         <FormField
           control={form.control}
@@ -219,13 +219,6 @@ const ServiceForm = ({ services, units }: { services: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Email là bắt buộc",
-            pattern: {
-              value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-              message: "Email không hợp lệ",
-            },
-          }}
         />
         <FormField
           control={form.control}
@@ -260,9 +253,6 @@ const ServiceForm = ({ services, units }: { services: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Dịch vụ là bắt buộc",
-          }}
         />
         <FormField
           control={form.control}
@@ -300,9 +290,6 @@ const ServiceForm = ({ services, units }: { services: any; units: any }) => {
               )}
             </FormItem>
           )}
-          rules={{
-            required: "Captcha là bắt buộc",
-          }}
         />
 
         <div className="flex justify-center md:justify-end mt-4">

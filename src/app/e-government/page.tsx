@@ -8,10 +8,15 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { getNewsByCateId } from "@/services/apis/menu.service";
+import { getProductsByServiceCate } from "@/services/apis/products.service";
 import Link from "next/link";
 import React from "react";
 
-const EGovernmentPage = () => {
+const EGovernmentPage = async () => {
+  const introHeader = await getNewsByCateId({ id: 2170, page: 1, num: 1 });
+
+  const products = await getProductsByServiceCate(2170);
   return (
     <div className="xl:container mx-auto px-4 xl:px-0 pb-5">
       <Breadcrumb className="my-6">
@@ -27,8 +32,8 @@ const EGovernmentPage = () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <IntroHeader id={2170} />
-      <ProductList id={2170} />
+      <IntroHeader introHeader={introHeader} />
+      <ProductList products={products.data} />
     </div>
   );
 };

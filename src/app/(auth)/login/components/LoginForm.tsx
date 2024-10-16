@@ -2,11 +2,10 @@
 import React, { useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Lock, User } from "lucide-react";
-import useSWR from "swr";
 import { authenticate } from "@/lib/actions";
 import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
-import { getCaptcha } from "@/apiRequests/common";
+import { getCaptcha } from "@/services/apis/common.service";
 
 const LoginForm = () => {
   const router = useRouter();

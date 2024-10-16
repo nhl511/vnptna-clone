@@ -1,7 +1,7 @@
 import React from "react";
 import NewInfoItem from "./NewInfoItem/NewInfoItem";
 import Link from "next/link";
-import { getNewsByCateId } from "@/apiRequests/menu";
+import { getNewsByCateId } from "@/services/apis/menu.service";
 
 const NewInfo = async () => {
   const result = await getNewsByCateId({ id: 2172, page: 1, num: 5 });

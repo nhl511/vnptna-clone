@@ -1,6 +1,6 @@
 "use server";
 
-import { login } from "@/apiRequests/auth";
+import { login } from "@/services/apis/auth.service";
 import { cookies } from "next/headers";
 
 export const authenticate = async (prevState: any, formData: any) => {

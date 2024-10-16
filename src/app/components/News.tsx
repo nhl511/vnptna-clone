@@ -40,11 +40,6 @@ const News = ({ news }: { news: newsType[] }) => {
           }}
           className="mb-8"
           setApi={setApi}
-          // plugins={[
-          //   Autoplay({
-          //     delay: 3000,
-          //   }),
-          // ]}
         >
           <CarouselContent>
             {news.map((item: newsType) => (
@@ -59,8 +54,6 @@ const News = ({ news }: { news: newsType[] }) => {
             ))}
           </CarouselContent>
         </Carousel>
-        {/* <ControlCarousel current={current} count={count} api={api} /> */}
-        {/* <ControlCarouselInfi api={api} /> */}
         <ControlCarouselInfi2 current={current} count={count} parentApi={api} />
       </div>
     </div>

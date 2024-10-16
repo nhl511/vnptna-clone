@@ -15,8 +15,6 @@ const SearchPage = () => {
 
   const handleFind = () => {
     if (searchInput) {
-      // const params = new URLSearchParams(window.location.search);
-      // params.set("key-word", searchInput);
       router.push("/search?key-word=" + searchInput);
       setSearchInput("");
     }

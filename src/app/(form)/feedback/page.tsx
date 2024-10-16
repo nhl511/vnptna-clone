@@ -3,24 +3,8 @@
 import React from "react";
 import Header from "../components/Header";
 import FeedbackForm from "./components/FeedbackForm";
+import { getCriteria, getUnits } from "@/services/apis/partner.service";
 
-const getUnits = async () => {
-  const res = await fetch(
-    process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-      "/api/v1/portal/partner/getUnit?partner_id=66"
-  );
-  const result = await res.json();
-  return result.data;
-};
-
-const getCriteria = async () => {
-  const res = await fetch(
-    process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-      "/api/v1/portal/partner/criteria?partner_id=66"
-  );
-  const result = await res.json();
-  return result.data;
-};
 const FeedbackPage = async () => {
   const units = await getUnits();
   const criteria = await getCriteria();
